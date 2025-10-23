@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reha Finance Institute - Student Fee Receipt</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* ======== BASIC STYLING ======== */
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e8f1f3 0%, #f9fafc 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 50px 20px;
+  }
+  .container {
+    background: #fff;
+    width: 100%;
+    max-width: 750px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    padding: 40px 50px;
+    position: relative;
+    animation: fadeIn 0.9s ease forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ======== HEADER ======== */
+  .header {
+    text-align: center;
+    border-bottom: 3px solid #0c2340;
+    padding-bottom: 15px;
+    margin-bottom: 30px;
+  }
+  .header h1 {
+    color: #0c2340;
+    font-size: 1.8rem;
+    margin: 0;
+  }
+  .header p {
+    color: #047857;
+    margin: 5px 0 0;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+
+  /* ======== FORM ======== */
+  form {
+    display: grid;
+    gap: 18px;
+  }
+  label {
+    font-weight: 600;
+    color: #0c2340;
+  }
+  input, select {
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccd4dc;
+    transition: 0.3s;
+    width: 100%;
+  }
+  input:focus, select:focus {
+    border-color: #047857;
+    box-shadow: 0 0 0 3px rgba(4,120,87,0.2);
+    outline: none;
+  }
+  button {
+    background: linear-gradient(45deg, #0c2340, #047857);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+  }
+  button:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
+  }
+
+  /* ======== RECEIPT ======== */
+  .receipt {
+    display: none;
+    margin-top: 30px;
+    border: 2px dashed #0c2340;
+    padding: 25px;
+    border-radius: 10px;
+    background: #f9fafb;
+  }
+  .receipt h3 {
+    text-align: center;
+    color: #0c2340;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+  }
+  .receipt table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .receipt table td {
+    padding: 8px 4px;
+    border-bottom: 1px dotted #ccc;
+    font-size: 0.95rem;
+  }
+  .receipt table td:first-child {
+    font-weight: 600;
+    color: #0c2340;
+    width: 45%;
+  }
+  .footer-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 10px;
+  }
+  .print-btn {
+    background: #f0b429;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: .3px;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  /* ======== PRINT OPTIMIZATION ======== */
+  @media print {
+    body { background: white; }
+    form, button { display: none !important; }
+    .receipt { display: block !important; box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Reha Finance & Trading Institute</h1>
+    <p>Student Admission & Fee Receipt Form</p>
+  </div>
+
+  <form id="studentForm" action="https://formsubmit.co/rehainstitutegorakhpur@gmail.com" method="POST">
+    <input type="hidden" name="_subject" value="New Student Registration - Reha Institute">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+
+    <label>Student Name</label>
+    <input type="text" name="Student Name" id="studentName" required>
+
+    <label>Mobile Number</label>
+    <input type="tel" name="Mobile Number" id="mobile" pattern="[0-9]{10}" placeholder="10-digit number" required>
+
+    <label>Email</label>
+    <input type="email" name="Email" id="email" placeholder="example@gmail.com">
+
+    <label>Course</label>
+    <select name="Course" id="course" required>
+      <option value="">-- Select Course --</option>
+      <option value="Basic Course - ₹9,999">Basic Course - ₹9,999</option>
+      <option value="Options Course - ₹12,999">Options Course - ₹12,999</option>
+      <option value="Master Course - ₹14,999">Master Course - ₹14,999</option>
+    </select>
+
+    <label>Payment Mode</label>
+    <select name="Payment Mode" id="mode" required>
+      <option value="UPI">UPI</option>
+      <option value="Cash">Cash</option>
+      <option value="Card">Card</option>
+      <option value="Bank Transfer">Bank Transfer</option>
+    </select>
+
+    <label>Amount Paid (₹)</label>
+    <input type="number" name="Amount Paid" id="amount" required min="0">
+
+    <label>Transaction ID / Receipt No</label>
+    <input type="text" name="Transaction ID" id="txn" placeholder="e.g. REHA12345">
+
+    <button type="submit">Submit & Generate Receipt</button>
+  </form>
+
+  <!-- RECEIPT -->
+  <div class="receipt" id="receipt">
+    <h3>🎓 Fee Receipt</h3>
+    <table>
+      <tr><td>Receipt No:</td><td id="r-txn"></td></tr>
+      <tr><td>Student Name:</td><td id="r-name"></td></tr>
+      <tr><td>Course:</td><td id="r-course"></td></tr>
+      <tr><td>Amount Paid (₹):</td><td id="r-amount"></td></tr>
+      <tr><td>Payment Mode:</td><td id="r-mode"></td></tr>
+      <tr><td>Mobile:</td><td id="r-mobile"></td></tr>
+      <tr><td>Email:</td><td id="r-email"></td></tr>
+      <tr><td>Date:</td><td id="r-date"></td></tr>
+    </table>
+    <p class="footer-note">This is a system-generated receipt.<br>Reha Finance & Trading Institute, Gorakhpur</p>
+    <button class="print-btn" onclick="window.print()">🖨️ Print / Save Receipt</button>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('studentForm');
+  const receipt = document.getElementById('receipt');
+
+  form.addEventListener('submit', function(e){
+    // Instantly show receipt preview before redirect
+    const now = new Date();
+    document.getElementById('r-name').textContent = document.getElementById('studentName').value;
+    document.getElementById('r-mobile').textContent = document.getElementById('mobile').value;
+    document.getElementById('r-email').textContent = document.getElementById('email').value || '—';
+    document.getElementById('r-course').textContent = document.getElementById('course').value;
+    document.getElementById('r-mode').textContent = document.getElementById('mode').value;
+    document.getElementById('r-amount').textContent = "₹" + document.getElementById('amount').value;
+    document.getElementById('r-txn').textContent = document.getElementById('txn').value || "REHA-" + Math.floor(Math.random()*90000+10000);
+    document.getElementById('r-date').textContent = now.toLocaleString();
+    receipt.style.display = 'block';
+  });
+</script>
+
+</body>
+</html>
