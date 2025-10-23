@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reha Finance Institute - Student Fee Receipt</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<!-- jsPDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
-  /* ======== BASIC STYLING ======== */
   body {
     font-family: 'Poppins', sans-serif;
     background: linear-gradient(135deg, #e8f1f3 0%, #f9fafc 100%);
@@ -30,35 +32,17 @@
     from { opacity: 0; transform: translateY(40px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
-  /* ======== HEADER ======== */
   .header {
     text-align: center;
     border-bottom: 3px solid #0c2340;
     padding-bottom: 15px;
     margin-bottom: 30px;
   }
-  .header h1 {
-    color: #0c2340;
-    font-size: 1.8rem;
-    margin: 0;
-  }
-  .header p {
-    color: #047857;
-    margin: 5px 0 0;
-    font-weight: 500;
-    font-size: 0.95rem;
-  }
+  .header h1 { color: #0c2340; font-size: 1.8rem; margin: 0; }
+  .header p { color: #047857; margin: 5px 0 0; font-weight: 500; font-size: 0.95rem; }
 
-  /* ======== FORM ======== */
-  form {
-    display: grid;
-    gap: 18px;
-  }
-  label {
-    font-weight: 600;
-    color: #0c2340;
-  }
+  form { display: grid; gap: 18px; }
+  label { font-weight: 600; color: #0c2340; }
   input, select {
     padding: 10px 12px;
     font-size: 1rem;
@@ -84,12 +68,8 @@
     font-size: 1rem;
     letter-spacing: 0.3px;
   }
-  button:hover {
-    transform: translateY(-2px);
-    opacity: 0.95;
-  }
+  button:hover { transform: translateY(-2px); opacity: 0.95; }
 
-  /* ======== RECEIPT ======== */
   .receipt {
     display: none;
     margin-top: 30px;
@@ -104,10 +84,7 @@
     font-size: 1.4rem;
     margin-bottom: 20px;
   }
-  .receipt table {
-    width: 100%;
-    border-collapse: collapse;
-  }
+  .receipt table { width: 100%; border-collapse: collapse; }
   .receipt table td {
     padding: 8px 4px;
     border-bottom: 1px dotted #ccc;
@@ -132,8 +109,6 @@
     margin-top: 20px;
     width: 100%;
   }
-
-  /* ======== PRINT OPTIMIZATION ======== */
   @media print {
     body { background: white; }
     form, button { display: none !important; }
@@ -187,7 +162,6 @@
     <button type="submit">Submit & Generate Receipt</button>
   </form>
 
-  <!-- RECEIPT -->
   <div class="receipt" id="receipt">
     <h3>🎓 Fee Receipt</h3>
     <table>
@@ -209,19 +183,44 @@
   const form = document.getElementById('studentForm');
   const receipt = document.getElementById('receipt');
 
-  form.addEventListener('submit', function(e){
-    // Instantly show receipt preview before redirect
+  form.addEventListener('submit', async function(e){
+    e.preventDefault(); // Stop actual submit for preview
+
     const now = new Date();
+    const txn = document.getElementById('txn').value || "REHA-" + Math.floor(Math.random()*90000+10000);
+
+    // Fill receipt preview
     document.getElementById('r-name').textContent = document.getElementById('studentName').value;
     document.getElementById('r-mobile').textContent = document.getElementById('mobile').value;
     document.getElementById('r-email').textContent = document.getElementById('email').value || '—';
     document.getElementById('r-course').textContent = document.getElementById('course').value;
     document.getElementById('r-mode').textContent = document.getElementById('mode').value;
     document.getElementById('r-amount').textContent = "₹" + document.getElementById('amount').value;
-    document.getElementById('r-txn').textContent = document.getElementById('txn').value || "REHA-" + Math.floor(Math.random()*90000+10000);
+    document.getElementById('r-txn').textContent = txn;
     document.getElementById('r-date').textContent = now.toLocaleString();
     receipt.style.display = 'block';
+
+    // Send form data to email (FormSubmit)
+    form.submit();
+
+    // Auto generate PDF after small delay
+    setTimeout(() => generatePDF(txn), 1000);
   });
+
+  async function generatePDF(txn) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+
+    const element = document.querySelector("#receipt");
+    await doc.html(element, {
+      callback: function(doc) {
+        doc.save("Reha_Receipt_" + txn + ".pdf");
+      },
+      x: 20,
+      y: 20,
+      html2canvas: { scale: 0.6 }
+    });
+  }
 </script>
 
 </body>
